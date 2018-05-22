@@ -1,5 +1,4 @@
-#include <stdio.h>
-#include <malloc.h>
+#include "file-reader.h"
 
 static long int LastSizeRead;
 static void *LastMalloc;
@@ -18,7 +17,7 @@ long int GetLastSizeRead(void)
 //      non-zero : Size of malloc'd buffer.
 //      zero : Failure.
 // *****************************************************************************
-int FileReader(const char *pFullPath, void **pDest)
+long int FileReader(const char *pFullPath, void **pDest)
      {
      long int Size;
      FILE *pInput;
