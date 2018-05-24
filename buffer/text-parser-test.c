@@ -3,6 +3,7 @@
 #include <string.h>
 #include "text-parser.h"
 
+
 const unsigned char text[] =
      {
      "(.text+0x20): undefined reference to `main'\n\
@@ -25,38 +26,47 @@ collect2: error: ld returned 1 exit status\n\
 dev@dev-VirtualBox:~/projects/assembler/common-submodule/buffer$\n"
      };
 
+
+/*
+const unsigned char text[] =
+          {
+"When in the Course of human events it becomes necessary for one people to \n\
+dissolve the political bands which have connected them with another and to \n\
+assume among the powers of the earth, the separate and equal station to which the \n\
+Laws of Nature and of Nature's God entitle them, a decent respect to the \n\
+opinions of mankind requires that they should declare the causes which \n\
+impel them to the separation.\n"
+          };
+*/
+
+
 // *****************************************************************************
 // *****************************************************************************
 int main(int argc, unsigned char **argv)
      {
-     const char Terminator[] = { 10, 13, 0 };
+     const char Terminator[] = { '\r', '\n', 0x0A, 0 };
 
      unsigned long Length = strlen(text);
+
+     int x;
 
      printf("Length is %i bytes\n", Length);
 
      int Start = 0, End = 0, Count = 0;
 
-     for(int x=0;x < Length;x += (End - Start))
+     for(x=0;x < Length;)
           {
           Start = ScanBufferForTerminatorsStart(text,
                                                 Terminator,
                                                 Start,
                                                 Length);
 
-          if(Start == -1)
-               printf("shit.\n");
-
           End = ScanBufferForTerminatorsEnd(text,
                                             Terminator,
                                             Start,
                                             Length);
 
-          if(End == -1)
-               printf("fuck.\n");
-
-
-          printf("%04i : ", Count);
+          printf("%04i : %04i %04i : ", Count, Start, End);
 
           for(int n=Start;n < End;n++)
                {
@@ -64,6 +74,8 @@ int main(int argc, unsigned char **argv)
                }
 
           printf("\n");
+
+          x += (End - Start);
 
           Start = End;
 
